@@ -29,7 +29,8 @@
     con.onload = function () {
         let listResponse = con.response.response
         for(i = 0;i<listResponse.length;i++){
-            l += listResponse[i].id + listResponse[i].content + "\n"
+            console.log(listResponse[i])
+            l += "<div class='mb-4'><h3>" + listResponse[i].id + ". " + "<h3><p>" + listResponse[i].content + "</p></div>"
         }
         element.innerHTML = l
     }
