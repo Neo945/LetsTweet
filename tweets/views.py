@@ -8,7 +8,8 @@ from .models import Tweet
 class HomeView(View):
     def get(self,request,*args,**kwargs):
         # print(request,args,kwargs)
-        return HttpResponse("Hello World")
+        # return HttpResponse("Hello World")
+        return render(request=request,template_name='pages/home.html',context={})
 
 class Tweets_detail_views(View):
     def get(self,request,tweet_id,*args,**kwargs):
