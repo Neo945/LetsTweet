@@ -21,8 +21,20 @@
     const method = 'GET'
     const url = '/tweets'
 
+    function HandleLike(tweet_id,count) {
+        console.log(tweet_id + " " + count)
+        count++
+    }
+
+    function LikeButton(tweet) {
+        return "<button class='btn btn-primary btn-sm' onclick=HandleLike(" + tweet.id + "," + tweet.likes + ")>" + tweet.likes + " LIKE</button>"
+    }
+
     function formatTweetElement(tweet) {
-        var formatedTweet =  "<div class='mb-4 tweet' id='tweet-" + tweet.id + "' ><p>" + tweet.content + "</p></div>"
+        var formatedTweet =  "<div class='mb-4 tweet' id='tweet-" + 
+        tweet.id + "' ><p>" + tweet.content + "</p>  " + 
+        LikeButton(tweet)
+        + "  </div>"
         return formatedTweet
     }
 
