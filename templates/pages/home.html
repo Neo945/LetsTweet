@@ -9,4 +9,23 @@
 
 {% block content %}
 <h1>'Ello there mate</h1>
+
+
+
+
+<script>
+    const con = new XMLHttpRequest()
+    const responseType = 'json'
+    const method = 'GET'
+    const url = '/tweets'
+
+    con.responseType = responseType
+    con.open(method,url)
+    con.onload = function () {
+        console.log(con.response.response)
+    }
+    con.send()
+</script>
+
+
 {% endblock content %}

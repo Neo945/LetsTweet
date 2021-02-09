@@ -26,3 +26,8 @@ class Tweets_detail_views(View):
             status = 404
         return JsonResponse(data,status=status)
 
+class tweet_list_view(View):
+    def get(self,request,*args,**kwargs):
+        tl = Tweet.objects.all()
+        data_list = [{'id':x.id,'content':x.content} for x in tl]
+        return JsonResponse({'response':data_list})
