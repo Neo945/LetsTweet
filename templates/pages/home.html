@@ -21,6 +21,10 @@
     const method = 'GET'
     const url = '/tweets'
 
+    function formatTweetElement(tweet) {
+        var formatedTweet =  "<div class='mb-4 tweet' id='tweet-" + tweet.id + "' ><p>" + tweet.content + "</p></div>"
+        return formatedTweet
+    }
 
     const element = document.getElementById("tweets")
     let l = "";
@@ -29,8 +33,7 @@
     con.onload = function () {
         let listResponse = con.response.response
         for(i = 0;i<listResponse.length;i++){
-            console.log(listResponse[i])
-            l += "<div class='mb-4'><h3>" + listResponse[i].id + ". " + "<h3><p>" + listResponse[i].content + "</p></div>"
+            l += formatTweetElement(listResponse[i])
         }
         element.innerHTML = l
     }
