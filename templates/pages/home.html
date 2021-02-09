@@ -8,8 +8,10 @@
 
 
 {% block content %}
-<h1>'Ello there mate</h1>
+<!-- <h1>'Ello there mate</h1> -->
+<div id="tweets">
 
+</div>
 
 
 
@@ -19,10 +21,17 @@
     const method = 'GET'
     const url = '/tweets'
 
+
+    const element = document.getElementById("tweets")
+    let l = "";
     con.responseType = responseType
     con.open(method,url)
     con.onload = function () {
-        console.log(con.response.response)
+        let listResponse = con.response.response
+        for(i = 0;i<listResponse.length;i++){
+            l += listResponse[i].id + listResponse[i].content + "\n"
+        }
+        element.innerHTML = l
     }
     con.send()
 </script>
