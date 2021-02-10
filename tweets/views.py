@@ -1,5 +1,5 @@
 from django.http.response import Http404, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views import View
 from django.shortcuts import HttpResponse
 from .models import Tweet
@@ -39,9 +39,12 @@ class TweetForm(View):
     def get(self,request,*args,**kwargs):
         return render(request,'components/forms.html',{'form':TweetFOrm()})
     def post(self,request,*args,**kwargs):
+        next_url = request.POST.get('next') or None
         form = TweetFOrm(request.POST)
         if form.is_valid():
             obj = form.save(commit=True)
             obj.save()
+            if next_url!=None:
+                return redirect(next_url)
             form = TweetFOrm()
         return render(request,'components/forms.html',{'form':TweetFOrm()})
