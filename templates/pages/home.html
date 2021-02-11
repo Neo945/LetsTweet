@@ -88,18 +88,24 @@
         xhr.responseType = 'json'
         xhr.open(method,endPoint)
         xhr.onload = function () {
-            const serverResponse = xhr.response
-            // console.log(serverResponse)
-            // const element = document.getElementById("tweets")
-            // Loadtweets(element)
+            if (xhr.status===201){
+                const serverResponse = xhr.response
+                // console.log(serverResponse)
+                // const element = document.getElementById("tweets")
+                // Loadtweets(element)
 
-            // const element2 = document.getElementById("clear")
-            // element2.value = ""
-            // OR
-            form.reset()
-            const response = xhr.response
-            const newTweetElement = formatTweetElement(response)
-            element.innerHTML = newTweetElement + element.innerHTML
+                // const element2 = document.getElementById("clear")
+                // element2.value = ""
+                // OR
+                form.reset()
+                const response = xhr.response
+                const newTweetElement = formatTweetElement(response)
+                element.innerHTML = newTweetElement + element.innerHTML
+            }
+        }
+        xhr.onerror = function () {
+            alert("Try again later!!")
+            // Error are ignored for now
         }
         xhr.setRequestHeader("HTTP_X_REQUESTED_WITH","XMLHttpRequest")
         xhr.setRequestHeader("X-Requested-With","XMLHttpRequest")

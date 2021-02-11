@@ -51,4 +51,7 @@ class TweetForm(View):
             if next_url!=None and is_safe_url(next_url,settings.ALLOWED_HOSTS):
                 return redirect(next_url)
             form = TweetFOrm()
+        if form.errors:
+            if request.is_ajax():
+                return JsonResponse(form.errors,status=400)
         return render(request,'components/forms.html',{'form':TweetFOrm()})
