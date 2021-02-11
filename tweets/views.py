@@ -33,7 +33,7 @@ class Tweets_detail_views(View):
 class tweet_list_view(View):
     def get(self,request,*args,**kwargs):
         tl = Tweet.objects.all()
-        data_list = [{'id':x.id,'content':x.content,"likes":random.randint(0,100)} for x in tl]
+        data_list = [x.serialize() for x in tl]
         return JsonResponse({'response':data_list})
 
 
@@ -46,6 +46,8 @@ class TweetForm(View):
         if form.is_valid():
             obj = form.save(commit=False)
             obj.save()
+            if request.is_ajax():
+                return JsonResponse(obj.serialize(),status=201)
             if next_url!=None and is_safe_url(next_url,settings.ALLOWED_HOSTS):
                 return redirect(next_url)
             form = TweetFOrm()
