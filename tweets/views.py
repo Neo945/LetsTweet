@@ -39,12 +39,24 @@ class tweet_list_view(View):
 
 class TweetForm(View):
     def get(self,request,*args,**kwargs):
+        print(request.user)
+        if not request.user.is_authenticated:
+            if request.is_ajax():
+                return JsonResponse({},status=401)
+            return JsonResponse(settings.LOGIN_URL)
         return render(request,'components/forms.html',{'form':TweetFOrm()})
     def post(self,request,*args,**kwargs):
+        user = request.user or None
+        if not request.user.is_authenticated:
+            user = None
+            if request.is_ajax():
+                return JsonResponse({},status=401)
+            return JsonResponse(settings.LOGIN_URL)
         next_url = request.POST.get('next') or None
         form = TweetFOrm(request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
+            obj.user = user
             obj.save()
             if request.is_ajax():
                 return JsonResponse(obj.serialize(),status=201)
