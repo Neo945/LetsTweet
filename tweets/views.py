@@ -5,6 +5,8 @@ from django.shortcuts import HttpResponse
 from .models import Tweet
 from .forms import TweetFOrm
 import random
+from django.utils.http import is_safe_url
+from django.conf import settings
 
 # Create your views here.
 class HomeView(View):
@@ -42,9 +44,9 @@ class TweetForm(View):
         next_url = request.POST.get('next') or None
         form = TweetFOrm(request.POST)
         if form.is_valid():
-            obj = form.save(commit=True)
+            obj = form.save(commit=False)
             obj.save()
-            if next_url!=None:
+            if next_url!=None and is_safe_url(next_url,settings.ALLOWED_HOSTS):
                 return redirect(next_url)
             form = TweetFOrm()
         return render(request,'components/forms.html',{'form':TweetFOrm()})
