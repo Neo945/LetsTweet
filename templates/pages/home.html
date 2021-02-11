@@ -20,7 +20,7 @@
         <form action="/create-tweet" method="POST" class="form" id="tweet-form">
             <input type="hidden" value="/" name="next"/>
             {% csrf_token %}
-            <textarea class="form-control" name="content" id="clear" placeholder="Your Tweet"></textarea>
+            <textarea required='required' class="form-control" name="content" id="clear" placeholder="Your Tweet"></textarea>
             <button class="btn btn-primary" type="submit">Submit</button>
         </form>
     </div>
@@ -92,11 +92,14 @@
             // console.log(serverResponse)
             // const element = document.getElementById("tweets")
             // Loadtweets(element)
+
             // const element2 = document.getElementById("clear")
             // element2.value = ""
+            // OR
+            form.reset()
             const response = xhr.response
             const newTweetElement = formatTweetElement(response)
-            element.prepend(newTweetElement)
+            element.innerHTML = newTweetElement + element.innerHTML
         }
         xhr.setRequestHeader("HTTP_X_REQUESTED_WITH","XMLHttpRequest")
         xhr.setRequestHeader("X-Requested-With","XMLHttpRequest")
