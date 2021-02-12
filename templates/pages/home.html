@@ -62,7 +62,7 @@
         con.responseType = responseType
         con.open(method,url)
         con.onload = function () {
-            let listResponse = con.response.response
+            let listResponse = con.response
             for(i = 0;i<listResponse.length;i++){
                 l += formatTweetElement(listResponse[i])
             }

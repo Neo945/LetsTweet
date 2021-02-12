@@ -2,11 +2,15 @@ from django.http.response import Http404, JsonResponse
 from django.shortcuts import render,redirect
 from django.views import View
 from django.shortcuts import HttpResponse
+from rest_framework import serializers
 from .models import Tweet
 from .forms import TweetFOrm
 import random
 from django.utils.http import is_safe_url
 from django.conf import settings
+from .serializers import TweetSerialzer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
 # Create your views here.
 class HomeView(View):
@@ -15,7 +19,33 @@ class HomeView(View):
         # return HttpResponse("Hello World")
         return render(request=request,template_name='pages/home.html',context={})
 
-class Tweets_detail_views(View):
+@api_view(['GET'])
+def Tweets_detail_views(request,tweet_id,*args,**kwargs):
+    tweet = Tweet.objects.filter(pk=tweet_id)
+    if not tweet.exists():
+        return Response({},status=404)
+    serializer = TweetSerialzer(tweet.first())
+    return Response(serializer.data,status=201)
+
+@api_view(['GET'])
+def tweet_list_view(request,*args,**kwargs):
+    tl = Tweet.objects.all()
+    seriazer = TweetSerialzer(tl,many=True)
+    return Response(seriazer.data)
+
+@api_view(['POST'])
+def TweetForm(request,*args,**kwargs):
+    data = request.POST or None
+    serializer = TweetSerialzer(data=data)
+    if serializer.is_valid():
+        obj = serializer.save(user=request.user)
+        return Response(serializer.data,status=201)
+    return Response({},status=201)
+
+
+
+
+class Tweets_detail_views_pure_django(View):
     def get(self,request,tweet_id,*args,**kwargs):
         data = {
             "id" : int(tweet_id),
@@ -30,14 +60,13 @@ class Tweets_detail_views(View):
             status = 404
         return JsonResponse(data,status=status)
 
-class tweet_list_view(View):
+class tweet_list_view_pure_django(View):
     def get(self,request,*args,**kwargs):
         tl = Tweet.objects.all()
         data_list = [x.serialize() for x in tl]
         return JsonResponse({'response':data_list})
 
-
-class TweetForm(View):
+class TweetFormPureDjango(View):
     def get(self,request,*args,**kwargs):
         print(request.user)
         if not request.user.is_authenticated:
