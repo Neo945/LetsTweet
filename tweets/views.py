@@ -61,12 +61,13 @@ def TweetForm(request,*args,**kwargs):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def Tweets_action_views(request,tweet_id,*args,**kwargs):
-    serializer = TweetActionSerializer(request.POST)
+def Tweets_action_views(request,*args,**kwargs):
+    print(request.data)
+    serializer = TweetActionSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         data = serializer.validated_data
         tweet_id = data.get('id')
-        action = data.get('action')        
+        action = data.get('action')
         tweet = Tweet.objects.filter(pk=tweet_id)
         if not tweet.exists():
             return Response({},status=404)

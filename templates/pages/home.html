@@ -36,19 +36,69 @@
 
 <script>
 
-    function HandleLike(tweet_id,count) {
-        console.log(tweet_id + " " + count)
-        count++
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+
+    function HandleLike(tweet_id,count,action) {
+        // console.log(tweet_id + " " + count)
+        // count++
+        const  url = '/tweets_action'
+        const method = 'POST'
+        const data = JSON.stringify({
+            id:tweet_id,
+            action:action
+        })
+        console.log(data)
+        const xhr = new XMLHttpRequest()
+        const csrftoken = getCookie('csrftoken');
+        xhr.open(method,url)
+        xhr.setRequestHeader('Content-Type','application/json')
+        xhr.setRequestHeader("HTTP_X_REQUESTED_WITH","XMLHttpRequest")
+        xhr.setRequestHeader("X-Requested-With","XMLHttpRequest")
+        xhr.setRequestHeader('X-CSRFToken',csrftoken)
+        xhr.onload = function () {
+            console.log(xhr.status,xhr.response)
+            const element = document.getElementById("tweets")
+            Loadtweets(element)
+        }
+        xhr.send(data)
+
     }
 
+    function UnikeButton(tweet) {
+        return "<button class='btn btn-primary btn-sm' onclick=HandleLike(" + tweet.id + "," + tweet.likes + ",'unlike')>UNLIKE</button>"
+    }
+
+
     function LikeButton(tweet) {
-        return "<button class='btn btn-primary btn-sm' onclick=HandleLike(" + tweet.id + "," + tweet.likes + ")>" + tweet.likes + " LIKE</button>"
+        return "<button class='btn btn-outline-primary btn-sm' onclick=HandleLike(" + tweet.id + "," + tweet.likes + ",'like')>" + tweet.likes + " LIKE</button>"
+    }
+
+    function RetweetButton(tweet) {
+        return "<button class='btn btn-outline-success btn-sm' onclick=HandleLike(" + tweet.id + "," + tweet.likes + ",'retweet')>RETWEET</button>"
     }
 
     function formatTweetElement(tweet) {
+        // console.log(tweet.id)
         var formatedTweet =  "<div class='col-12 border py-3 mb-4 tweet' id='tweet-" + 
         tweet.id + "' ><p>" + tweet.content + "</p>  " + 
-        LikeButton(tweet)
+        LikeButton(tweet) + 
+        UnikeButton(tweet) +
+        RetweetButton(tweet)
         + "  </div>"
         return formatedTweet
     }
