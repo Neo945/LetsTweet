@@ -27,6 +27,20 @@ def Tweets_detail_views(request,tweet_id,*args,**kwargs):
     serializer = TweetSerialzer(tweet.first())
     return Response(serializer.data,status=201)
 
+@api_view(['DELETE','GET','POST'])
+@permission_classes([IsAuthenticated])
+def Tweets_delete_views(request,tweet_id,*args,**kwargs):
+    tweet = Tweet.objects.filter(pk=tweet_id)
+    if not tweet.exists():
+        return Response({},status=404)
+    tweet = tweet.filter(user=request.user)
+    if not tweet.exists():
+        return Response({},status=401)
+    tweet.first().delete()
+    return Response({'message':'success'},status=201)
+
+
+
 @api_view(['GET'])
 def tweet_list_view(request,*args,**kwargs):
     tl = Tweet.objects.all()
@@ -34,7 +48,7 @@ def tweet_list_view(request,*args,**kwargs):
     return Response(seriazer.data)
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication])
+@authentication_classes([SessionAuthentication]) # D
 @permission_classes([IsAuthenticated])
 def TweetForm(request,*args,**kwargs):
     data = request.POST or None
