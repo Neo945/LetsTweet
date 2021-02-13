@@ -8,7 +8,7 @@ from .forms import TweetFOrm
 import random
 from django.utils.http import is_safe_url
 from django.conf import settings
-from .serializers import TweetSerialzer
+from .serializers import TweetSerialzer,TweetActionSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes,authentication_classes
 from rest_framework.authentication import SessionAuthentication
@@ -59,6 +59,25 @@ def TweetForm(request,*args,**kwargs):
     return Response({},status=400)
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def Tweets_action_views(request,tweet_id,*args,**kwargs):
+    serializer = TweetActionSerializer(request.POST)
+    if serializer.is_valid(raise_exception=True):
+        data = serializer.validated_data
+        tweet_id = data.get('id')
+        action = data.get('action')        
+        tweet = Tweet.objects.filter(pk=tweet_id)
+        if not tweet.exists():
+            return Response({},status=404)
+        obj = tweet.first()
+        if action=='like':
+            obj.likes.add(request.user)
+        elif action=='unlike':
+            obj.likes.remove(request.user)
+        elif action=='retweet':
+            pass
+    return Response({'message':'success'},status=200)
 
 
 
