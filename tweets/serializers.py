@@ -6,6 +6,7 @@ TWEET_ACTION_OPTIONS = ['like','unlike','retweet']
 class TweetActionSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     action = serializers.CharField()
+    content = serializers.CharField(allow_blank=True,required=False)
 
     def validate_action(self,value):
         if not value.lower().strip() in TWEET_ACTION_OPTIONS:
@@ -17,7 +18,7 @@ class TweetSerialzer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Tweet
-        fields = ['id','content','likes']
+        fields = ['id','content','likes','is_retweet']
     
     def get_likes(self,obj):
         return obj.likes.count()

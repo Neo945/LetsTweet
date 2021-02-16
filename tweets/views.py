@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect
 from django.views import View
 from django.shortcuts import HttpResponse
 from rest_framework import serializers
-from .models import Tweet
+from .models import Tweet, User
 from .forms import TweetFOrm
 import random
 from django.utils.http import is_safe_url
@@ -68,6 +68,7 @@ def Tweets_action_views(request,*args,**kwargs):
         data = serializer.validated_data
         tweet_id = data.get('id')
         action = data.get('action')
+        content = data.get('content')
         tweet = Tweet.objects.filter(pk=tweet_id)
         if not tweet.exists():
             return Response({},status=404)
@@ -77,7 +78,7 @@ def Tweets_action_views(request,*args,**kwargs):
         elif action=='unlike':
             obj.likes.remove(request.user)
         elif action=='retweet':
-            pass
+            newT = Tweet.objects.create(user=request.user,parent=obj,content=content)
     return Response({'message':'success'},status=200)
 
 

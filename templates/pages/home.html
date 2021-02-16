@@ -53,14 +53,16 @@
     }
     
 
-    function HandleLike(tweet_id,count,action) {
+    function HandleLike(tweet_id,count,action,content) {
         // console.log(tweet_id + " " + count)
         // count++
         const  url = '/tweets_action'
         const method = 'POST'
         const data = JSON.stringify({
             id:tweet_id,
-            action:action
+            action:action,
+            content:content,
+            
         })
         console.log(data)
         const xhr = new XMLHttpRequest()
@@ -89,7 +91,7 @@
     }
 
     function RetweetButton(tweet) {
-        return "<button class='btn btn-outline-success btn-sm' onclick=HandleLike(" + tweet.id + "," + tweet.likes + ",'retweet')>RETWEET</button>"
+        return "<button class='btn btn-outline-success btn-sm' onclick=HandleLike(" + tweet.id + "," + tweet.likes + ",'retweet','" + tweet.content + "')>RETWEET</button>"
     }
 
     function formatTweetElement(tweet) {
