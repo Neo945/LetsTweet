@@ -1,23 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
+// import './App.css';
+import { useEffect, useState } from 'react'
+
+
+function Loadtweets(callBack) {
+  const con = new XMLHttpRequest()
+  const responseType = 'json'
+  const method = 'GET'
+  const url = 'http://localhost:8000/tweets'
+  let l = "";
+  con.responseType = responseType
+  con.open(method,url)
+  con.onload = function () {
+    callBack(con.response,con.status)
+  }
+  con.send()
+}
+
+
+function Tweet(props){
+  return (
+    <div className='col-12 border py-3 mb-4 tweet' id={`tweet-${props.tweet.id}`}>
+        <p>{props.tweet.content}</p></div>
+  )
+}
+
+function ActionButton(props) {
+  return (
+    <button class='btn btn-outline-primary btn-sm'>{props.tweet.likes} LIKE</button>
+  )
+}
+
 
 function App() {
+  const [tweet,setTweet] = useState([])
+
+
+  useEffect(()=>{
+    const callBack = (response,status)=>{
+      if (status === 200){
+        setTweet(response)
+      }
+    }
+    Loadtweets(callBack)
+  },[])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="root">
+        {tweet.map(
+          (tweet,index)=>{
+            return (<div>
+              <Tweet tweet={tweet} key={index}/>
+              <ActionButton tweet={tweet} key={index}/>
+            </div>)
+        }
+          )}
     </div>
   );
 }
