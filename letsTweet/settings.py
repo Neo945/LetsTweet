@@ -18,9 +18,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
+with open(os.path.join(BASE_DIR,'letsTweet\etc\secret_key.txt')) as f:
+    SECRET_KEY = f.read().strip()
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'uu*b)&=kji&t=_bahbmz+v48+4dtous)1jo&3!z#_bl)hp6cm2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
