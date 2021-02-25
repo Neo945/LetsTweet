@@ -9,7 +9,7 @@ export default function ActionButton(props) {
     // console.log(likes,props.tweet.id)
     if(userLiked){
       setLikes(likes - 1)
-      setDidUserLiked(false)  
+      setDidUserLiked(false) 
     }else{
       setLikes(likes + 1)
       setDidUserLiked(true)

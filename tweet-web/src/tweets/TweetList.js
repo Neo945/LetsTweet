@@ -1,21 +1,22 @@
 import React,{useState,useEffect} from 'react'
 import ActionButton from './ActionButton'
-import TweetComponent from './TweetCompound'
 import Tweet from './Tweet'
-function Loadtweets(callBack){
-    fetch('http://localhost:8000/tweets').then(res => res.json()).then(data => {
-      console.log(data)
-      callBack(data,200)
-    })
-  }
+import Loadtweets from './LoadAllTweets'
   
   
-export function TweetContent() {
-    const [tweet,setTweet] = useState([])
+export default function TweetList(props) {
+    const [tweetinit,setTweetinit] = useState([])
+    const [tweets,setTweets] = useState([])
+    useEffect(()=>{
+        if([...props.newTweet].concat(tweetinit).length !== tweets.length){
+            setTweets([...props.newTweet].concat(tweetinit))
+        }
+    },[props.newTweet,tweets,tweetinit])
+
     useEffect(()=>{
       const callBack = (response,status)=>{
         if (status === 200){
-          setTweet(response)
+            setTweetinit(response)
         }
       }
       Loadtweets(callBack)
@@ -23,12 +24,11 @@ export function TweetContent() {
   
     return (
       <div className="root">
-        <TweetComponent />
-          {tweet.map(
+          {tweets.map(
             (tweet)=>{
               return (<div key={`buttonSet-${tweet.id}`}>
                 <Tweet tweet={tweet} />
-                <ActionButton tweet={tweet} action='like'/>
+                <ActionButton tweet={tweet} action='like' />
                 <ActionButton tweet={tweet} action='retweet'/>
               </div>)
           }
@@ -36,4 +36,3 @@ export function TweetContent() {
       </div>
     );
   }
-export default TweetContent

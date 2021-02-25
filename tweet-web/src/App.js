@@ -1,11 +1,11 @@
 // import './App.css';
 import React from 'react'
-import TweetContent from './tweets'
+import TweetComponent from './tweets/TweetComponent'
 
 
 function App(props){
   return (
-    <TweetContent />
+    <TweetComponent />
   )
 }
 
