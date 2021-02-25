@@ -1,15 +1,16 @@
 import React from 'react'
 import TweetList from './TweetList'
+import createTweet from './CreateTweet'
+
+
 export default function TweetComponent(props){
     const [newTweet,setNewTweet] = React.useState([])
     const tweetAreaRef = React.createRef()
     const onSubmitClicked = (event)=>{
       event.preventDefault()
       let newTweetList = [...newTweet]
-      newTweetList.unshift({
-        content: tweetAreaRef.current.value,
-        likes: 0,
-        id: 1234,
+      createTweet(tweetAreaRef.current.value,(response,status)=>{
+        newTweetList.unshift(response)
       })
       setNewTweet(newTweetList)
       tweetAreaRef.current.value = null
