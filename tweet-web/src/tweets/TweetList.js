@@ -7,6 +7,7 @@ import Loadtweets from './LoadAllTweets'
 export default function TweetList(props) {
     const [tweetinit,setTweetinit] = useState([])
     const [tweets,setTweets] = useState([])
+    const [tweetsDidSet,setTweetsDidSet] = useState(false)
     useEffect(()=>{
         if([...props.newTweet].concat(tweetinit).length !== tweets.length){
             setTweets([...props.newTweet].concat(tweetinit))
@@ -14,13 +15,16 @@ export default function TweetList(props) {
     },[props.newTweet,tweets,tweetinit])
 
     useEffect(()=>{
-      const callBack = (response,status)=>{
-        if (status === 200){
-            setTweetinit(response)
+      if (tweetsDidSet === false){
+        const callBack = (response,status)=>{
+          if (status === 200){
+              setTweetinit(response)
+              setTweetsDidSet(true)
+          }
         }
+        Loadtweets(callBack)  
       }
-      Loadtweets(callBack)
-    },[])
+    },[setTweetinit,tweetsDidSet])
   
     return (
       <div className="root">
