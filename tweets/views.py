@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect
 from django.views import View
 from django.shortcuts import HttpResponse
 from rest_framework import serializers
+from rest_framework.utils.serializer_helpers import JSONBoundField
 from .models import Tweet, User
 from .forms import TweetFOrm
 import random
@@ -13,7 +14,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes,authentication_classes
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-
+from letsTweet.rest_api.dev import DevAuthentication
+import json
 # Create your views here.
 class HomeView(View):
     def get(self,request,*args,**kwargs):
@@ -48,10 +50,10 @@ def tweet_list_view(request,*args,**kwargs):
     return Response(seriazer.data)
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication]) # D
+# @authentication_classes([SessionAuthentication]) # D
 @permission_classes([IsAuthenticated])
 def TweetForm(request,*args,**kwargs):
-    data = request.POST or None
+    data = request.data or None
     serializer = TweetSerialzer(data=data)
     if serializer.is_valid():
         obj = serializer.save(user=request.user)

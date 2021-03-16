@@ -24,7 +24,7 @@ class TweetSerialzer(serializers.ModelSerializer):
         return obj.likes.count()
 
 
-    def clean_content(self,data):
+    def validate_content(self,data):
         if len(data)>255:
             raise serializers.ValidationError("Too long")
         return data

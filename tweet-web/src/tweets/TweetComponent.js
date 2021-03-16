@@ -10,6 +10,7 @@ export default function TweetComponent(props){
       event.preventDefault()
       let newTweetList = [...newTweet]
       createTweet(tweetAreaRef.current.value,(response,status)=>{
+        console.log(response,status)
         newTweetList.unshift(response)
       })
       setNewTweet(newTweetList)
