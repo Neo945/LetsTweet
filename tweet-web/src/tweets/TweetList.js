@@ -7,7 +7,7 @@ import Loadtweets from './LoadAllTweets'
 export default function TweetList(props) {
     const [tweetinit,setTweetinit] = useState([])
     const [tweets,setTweets] = useState([])
-    const [tweetsDidSet,setTweetsDidSet] = useState(false)
+    const [tweetsDidSet,setTweetsDidSet] = useState(false) 
     useEffect(()=>{
         if([...props.newTweet].concat(tweetinit).length !== tweets.length){
             setTweets([...props.newTweet].concat(tweetinit))
