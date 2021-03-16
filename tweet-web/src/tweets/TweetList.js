@@ -17,10 +17,8 @@ export default function TweetList(props) {
     useEffect(()=>{
       if (tweetsDidSet === false){
         const callBack = (response,status)=>{
-          if (status === 200){
-              setTweetinit(response)
-              setTweetsDidSet(true)
-          }
+            setTweetinit(response)
+            setTweetsDidSet(true)
         }
         Loadtweets(callBack)  
       }

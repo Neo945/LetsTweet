@@ -28,13 +28,12 @@ export default function lookup(method, endpoint,callBack,data){
     con.setRequestHeader('Content-Type','application/json')
     con.setRequestHeader('Accept','application/json')
     if(csrf){
-        console.log(csrf)
         con.setRequestHeader("HTTP_X_REQUESTED_WITH", "XMLHttpRequest")
         con.setRequestHeader("X-Requested-With", "XMLHttpRequest")
         con.setRequestHeader("X-CSRFToken", csrf)
     }
     con.onload = function () {
-        console.log(con.response)
+        // console.log(con.response)
         callBack(con.response,con.status)
     }
     con.send(jsonData)
