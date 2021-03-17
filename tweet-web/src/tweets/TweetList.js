@@ -28,13 +28,11 @@ export default function TweetList(props) {
       <div className="root">
           {tweets.map(
             (tweet)=>{
-              return (<div key={`buttonSet-${tweet.id}`}>
+              return (<div key={`buttonSet-${tweet.id}`} className='border py-3'>
                 <Tweet tweet={tweet} />
-                <ActionButton tweet={tweet} action='like' />
-                <ActionButton tweet={tweet} action='retweet'/>
               </div>)
-          }
-            )}
+            }
+          )}
       </div>
     );
   }

@@ -13,12 +13,22 @@ class TweetActionSerializer(serializers.Serializer):
             raise serializers.ValidationError("Not a currect value")
         return value.lower().strip()
 
+class TweetCreateSerializer(serializers.ModelSerializer):
+    likes = serializers.SerializerMethodField(read_only=True)
+    
+    class Meta:
+        model = Tweet
+        fields = ['id', 'content', 'likes']
+    
+    def get_likes(self, obj):
+        return obj.likes.count()
 
 class TweetSerialzer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField(read_only=True)
+    parent = TweetCreateSerializer(read_only=True)
     class Meta:
         model = Tweet
-        fields = ['id','content','likes','is_retweet']
+        fields = ['id','content','likes','is_retweet','parent']
     
     def get_likes(self,obj):
         return obj.likes.count()
